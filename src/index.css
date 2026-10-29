@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-hand: 'Caveat', cursive;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #fdfbf7;
+    color: #1f1e1c;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-hand {
+  font-family: var(--font-hand);
+}
+
+/* Styled rich article content for extracted blog posts */
+.article-content h2 {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #141413;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.article-content h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #141413;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.article-content p {
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: #3d3a36;
+}
+
+.article-content ul,
+.article-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.article-content ul {
+  list-style-type: disc;
+}
+
+.article-content ol {
+  list-style-type: decimal;
+}
+
+.article-content li {
+  margin-bottom: 0.5rem;
+  line-height: 1.65;
+}
+
+.article-content img {
+  border-radius: 1rem;
+  margin: 1.5rem 0;
+  max-height: 440px;
+  width: 100%;
+  object-fit: cover;
+}
