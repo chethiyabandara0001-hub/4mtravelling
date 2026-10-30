@@ -59,24 +59,34 @@ export const CURRENCIES: Record<string, { code: string; symbol: string; rateFrom
 
 export const HERO_SLIDES = [
   {
-    image: 'https://4melankatours.com/wp-content/uploads/2024/06/ella-banner-5.webp',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/home-1.jpg',
     alt: 'Nine Arch Bridge in Ella highland tea country',
     caption: 'Ella · Central Highlands',
   },
   {
-    image: 'https://4melankatours.com/wp-content/uploads/2024/06/Beauty_of_Sigiriya_by_Binuka-edited.jpg',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/home-2.jpg',
     alt: 'Sigiriya Lion Rock Fortress at sunrise',
     caption: 'Sigiriya · UNESCO Heritage',
   },
   {
-    image: 'https://4melankatours.com/wp-content/uploads/2024/07/Galle-Fort-Banner-1920x800-1.webp',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/home-3.jpg',
+    alt: 'Wild elephants in Sri Lanka national park',
+    caption: 'Udawalawa & Yala · Wildlife Safaris',
+  },
+  {
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/home-4.jpg',
     alt: 'Historic Galle Dutch Fort lighthouse by the Indian Ocean',
     caption: 'Galle Fort · Southern Coast',
   },
   {
-    image: 'https://4melankatours.com/wp-content/uploads/2024/05/17cb571e-b0645bd4-mirissa-whale-watching_850x460_acf_cropped.jpg',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/home-5.jpg',
     alt: 'Tropical palm beach and ocean views in Mirissa',
-    caption: 'Mirissa · Southern Beaches',
+    caption: 'Mirissa & Bentota · Golden Beaches',
+  },
+  {
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/home-6.jpg',
+    alt: 'Sacred Buddhist stupas and ancient heritage of Sri Lanka',
+    caption: 'Anuradhapura & Kandy · Sacred Heritage',
   },
 ];
 
@@ -144,49 +154,49 @@ export const FLEET: FleetVehicle[] = [
     name: 'Honda Fit Shuttle',
     type: 'Hybrid Car',
     pricePerDayUsd: 80,
-    image: 'https://4melankatours.com/wp-content/uploads/2024/09/11965989_01-2.webp',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/09/11965989_01-2.webp',
     alt: 'Private hybrid car hire Honda Fit Shuttle for Sri Lanka tours',
   },
   {
     name: 'Honda Vezel',
     type: 'Compact SUV',
     pricePerDayUsd: 90,
-    image: 'https://4melankatours.com/wp-content/uploads/2024/05/vezel.jpg',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/vezel.jpg',
     alt: 'Compact SUV rental Honda Vezel for tourist trips Sri Lanka',
   },
   {
     name: 'Toyota Prius',
     type: 'Hybrid Car',
     pricePerDayUsd: 80,
-    image: 'https://4melankatours.com/wp-content/uploads/2024/05/pr.webp',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/pr.webp',
     alt: 'Toyota Prius hybrid rental for comfortable Sri Lanka travel',
   },
   {
     name: 'Toyota Axio',
     type: 'Hybrid Car',
     pricePerDayUsd: 80,
-    image: 'https://4melankatours.com/wp-content/uploads/2024/05/axio.jpeg',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/axio.jpeg',
     alt: 'Toyota Axio hybrid car for private tours Sri Lanka',
   },
   {
     name: 'Toyota KDH Flat Roof',
     type: '6 Seater Van',
     pricePerDayUsd: 120,
-    image: 'https://4melankatours.com/wp-content/uploads/2024/06/WhatsApp-Image-2024-06-09-at-09.51.50.jpeg',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/06/WhatsApp-Image-2024-06-09-at-09.51.50.jpeg',
     alt: '6-seater tourist van rental Toyota KDH Flat Roof Sri Lanka',
   },
   {
     name: 'Toyota KDH Highroof',
     type: '9 Seater Van',
     pricePerDayUsd: 150,
-    image: 'https://4melankatours.com/wp-content/uploads/2024/05/hr.webp',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/hr.webp',
     alt: '9-seater luxury tourist van Toyota KDH Highroof Sri Lanka',
   },
   {
     name: 'Toyota Coaster',
     type: '24 Seater Mini Bus',
     pricePerDayUsd: 200,
-    image: 'https://4melankatours.com/wp-content/uploads/2024/05/toyota-coaster-hire-mini-bus-booking.jpg',
+    image: 'https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/toyota-coaster-hire-mini-bus-booking.jpg',
     alt: '24-seater mini bus rental for group tours Sri Lanka',
   },
 ];

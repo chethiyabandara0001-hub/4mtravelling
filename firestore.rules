@@ -1,0 +1,403 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net (Default-Deny Catch-All)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Hardened Global Primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        request.auth.token.email == 'chethiyabandara0001@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // 3. Entity Validation Blueprints
+    function isValidAdminUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'email', 'createdAt']) &&
+        data.uid is string && data.uid.size() >= 1 && data.uid.size() <= 128 && data.uid.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 256 &&
+        data.createdAt == request.time;
+    }
+
+    function isValidSiteConfigDoc(data) {
+      return data.keys().hasAll(['id', 'brandName', 'tagline', 'phoneDisplay', 'email', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly([
+          'id', 'brandName', 'tagline', 'sltdaReg', 'founder', 'founderPhoto',
+          'phoneDisplay', 'phoneTel', 'whatsappUrl', 'whatsappNumber', 'viberUrl',
+          'email', 'googleMapsUrl', 'tripAdvisorUrl', 'facebookUrl',
+          'r2PublicDomain', 'r2UploadEndpoint',
+          'heroKicker', 'heroTitle', 'heroAccent', 'heroSubtitle',
+          'ayubowanKicker', 'ayubowanTitle', 'ayubowanAccent', 'ayubowanP1', 'ayubowanP2',
+          'visionText', 'missionText', 'promiseText', 'ctaBannerImage',
+          'refundPolicy', 'privacyPolicy', 'termsConditions', 'stats',
+          'updatedBy', 'updatedAt'
+        ]) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.brandName is string && data.brandName.size() <= 200 &&
+        data.tagline is string && data.tagline.size() <= 300 &&
+        data.phoneDisplay is string && data.phoneDisplay.size() <= 80 &&
+        data.email is string && data.email.size() <= 256 &&
+        (!('sltdaReg' in data) || (data.sltdaReg is string && data.sltdaReg.size() <= 120)) &&
+        (!('founder' in data) || (data.founder is string && data.founder.size() <= 200)) &&
+        (!('founderPhoto' in data) || (data.founderPhoto is string && data.founderPhoto.size() <= 2048)) &&
+        (!('phoneTel' in data) || (data.phoneTel is string && data.phoneTel.size() <= 80)) &&
+        (!('whatsappUrl' in data) || (data.whatsappUrl is string && data.whatsappUrl.size() <= 500)) &&
+        (!('whatsappNumber' in data) || (data.whatsappNumber is string && data.whatsappNumber.size() <= 60)) &&
+        (!('viberUrl' in data) || (data.viberUrl is string && data.viberUrl.size() <= 500)) &&
+        (!('googleMapsUrl' in data) || (data.googleMapsUrl is string && data.googleMapsUrl.size() <= 2048)) &&
+        (!('tripAdvisorUrl' in data) || (data.tripAdvisorUrl is string && data.tripAdvisorUrl.size() <= 2048)) &&
+        (!('facebookUrl' in data) || (data.facebookUrl is string && data.facebookUrl.size() <= 2048)) &&
+        (!('r2PublicDomain' in data) || (data.r2PublicDomain is string && data.r2PublicDomain.size() <= 1024)) &&
+        (!('r2UploadEndpoint' in data) || (data.r2UploadEndpoint is string && data.r2UploadEndpoint.size() <= 1024)) &&
+        (!('heroKicker' in data) || (data.heroKicker is string && data.heroKicker.size() <= 300)) &&
+        (!('heroTitle' in data) || (data.heroTitle is string && data.heroTitle.size() <= 300)) &&
+        (!('heroAccent' in data) || (data.heroAccent is string && data.heroAccent.size() <= 300)) &&
+        (!('heroSubtitle' in data) || (data.heroSubtitle is string && data.heroSubtitle.size() <= 2000)) &&
+        (!('ayubowanKicker' in data) || (data.ayubowanKicker is string && data.ayubowanKicker.size() <= 300)) &&
+        (!('ayubowanTitle' in data) || (data.ayubowanTitle is string && data.ayubowanTitle.size() <= 300)) &&
+        (!('ayubowanAccent' in data) || (data.ayubowanAccent is string && data.ayubowanAccent.size() <= 300)) &&
+        (!('ayubowanP1' in data) || (data.ayubowanP1 is string && data.ayubowanP1.size() <= 4000)) &&
+        (!('ayubowanP2' in data) || (data.ayubowanP2 is string && data.ayubowanP2.size() <= 4000)) &&
+        (!('visionText' in data) || (data.visionText is string && data.visionText.size() <= 1000)) &&
+        (!('missionText' in data) || (data.missionText is string && data.missionText.size() <= 1000)) &&
+        (!('promiseText' in data) || (data.promiseText is string && data.promiseText.size() <= 1000)) &&
+        (!('ctaBannerImage' in data) || (data.ctaBannerImage is string && data.ctaBannerImage.size() <= 2048)) &&
+        (!('refundPolicy' in data) || (data.refundPolicy is string && data.refundPolicy.size() <= 10000)) &&
+        (!('privacyPolicy' in data) || (data.privacyPolicy is string && data.privacyPolicy.size() <= 20000)) &&
+        (!('termsConditions' in data) || (data.termsConditions is string && data.termsConditions.size() <= 20000)) &&
+        (!('stats' in data) || (data.stats is list && data.stats.size() <= 12 && (data.stats.size() == 0 || data.stats[0] is map))) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidTourDoc(data) {
+      return data.keys().hasAll(['slug', 'type', 'title', 'heroImage', 'priceUsd', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly([
+          'slug', 'type', 'title', 'h1Html', 'kicker', 'description', 'lead', 'introLead',
+          'heroImage', 'posterImage', 'priceUsd', 'durationLabel',
+          'metaChips', 'routeStops', 'days', 'highlights', 'travelDetails',
+          'updatedBy', 'updatedAt'
+        ]) &&
+        data.slug is string && data.slug.size() >= 1 && data.slug.size() <= 128 && data.slug.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.type is string && data.type.size() <= 32 && (data.type == 'multi-day' || data.type == 'day') &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 300 &&
+        data.heroImage is string && data.heroImage.size() <= 2048 &&
+        data.priceUsd is number && data.priceUsd >= 0 && data.priceUsd <= 100000 &&
+        (!('h1Html' in data) || (data.h1Html is string && data.h1Html.size() <= 600)) &&
+        (!('kicker' in data) || (data.kicker is string && data.kicker.size() <= 200)) &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+        (!('lead' in data) || (data.lead is string && data.lead.size() <= 4000)) &&
+        (!('introLead' in data) || (data.introLead is string && data.introLead.size() <= 4000)) &&
+        (!('posterImage' in data) || (data.posterImage is string && data.posterImage.size() <= 2048)) &&
+        (!('durationLabel' in data) || (data.durationLabel is string && data.durationLabel.size() <= 120)) &&
+        (!('metaChips' in data) || (data.metaChips is list && data.metaChips.size() <= 20 && (data.metaChips.size() == 0 || data.metaChips[0] is string))) &&
+        (!('routeStops' in data) || (data.routeStops is list && data.routeStops.size() <= 60 && (data.routeStops.size() == 0 || data.routeStops[0] is string))) &&
+        (!('days' in data) || (data.days is list && data.days.size() <= 60 && (data.days.size() == 0 || data.days[0] is map))) &&
+        (!('highlights' in data) || (data.highlights is list && data.highlights.size() <= 40 && (data.highlights.size() == 0 || data.highlights[0] is string))) &&
+        (!('travelDetails' in data) || (data.travelDetails is list && data.travelDetails.size() <= 40 && (data.travelDetails.size() == 0 || data.travelDetails[0] is string))) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidDestinationDoc(data) {
+      return data.keys().hasAll(['slug', 'name', 'heroImage', 'cardImage', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly([
+          'slug', 'name', 'province', 'provinceShort', 'categorySlug', 'countLabel',
+          'description', 'lead', 'heroImage', 'cardImage', 'metaChips',
+          'introParagraphs', 'features', 'attractions', 'hotels', 'restaurants', 'relatedTourSlugs',
+          'updatedBy', 'updatedAt'
+        ]) &&
+        data.slug is string && data.slug.size() >= 1 && data.slug.size() <= 128 && data.slug.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 200 &&
+        data.heroImage is string && data.heroImage.size() <= 2048 &&
+        data.cardImage is string && data.cardImage.size() <= 2048 &&
+        (!('province' in data) || (data.province is string && data.province.size() <= 200)) &&
+        (!('provinceShort' in data) || (data.provinceShort is string && data.provinceShort.size() <= 120)) &&
+        (!('categorySlug' in data) || (data.categorySlug is string && data.categorySlug.size() <= 120)) &&
+        (!('countLabel' in data) || (data.countLabel is string && data.countLabel.size() <= 120)) &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+        (!('lead' in data) || (data.lead is string && data.lead.size() <= 4000)) &&
+        (!('metaChips' in data) || (data.metaChips is list && data.metaChips.size() <= 20 && (data.metaChips.size() == 0 || data.metaChips[0] is string))) &&
+        (!('introParagraphs' in data) || (data.introParagraphs is list && data.introParagraphs.size() <= 30 && (data.introParagraphs.size() == 0 || data.introParagraphs[0] is string))) &&
+        (!('features' in data) || (data.features is list && data.features.size() <= 30 && (data.features.size() == 0 || data.features[0] is map))) &&
+        (!('attractions' in data) || (data.attractions is list && data.attractions.size() <= 60 && (data.attractions.size() == 0 || data.attractions[0] is map))) &&
+        (!('hotels' in data) || (data.hotels is list && data.hotels.size() <= 40 && (data.hotels.size() == 0 || data.hotels[0] is map))) &&
+        (!('restaurants' in data) || (data.restaurants is list && data.restaurants.size() <= 40 && (data.restaurants.size() == 0 || data.restaurants[0] is map))) &&
+        (!('relatedTourSlugs' in data) || (data.relatedTourSlugs is list && data.relatedTourSlugs.size() <= 30 && (data.relatedTourSlugs.size() == 0 || data.relatedTourSlugs[0] is string))) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidBlogDoc(data) {
+      return data.keys().hasAll(['slug', 'title', 'heroImage', 'articleHtml', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly([
+          'slug', 'title', 'tag', 'date', 'author', 'excerpt', 'description',
+          'heroImage', 'articleHtml', 'updatedBy', 'updatedAt'
+        ]) &&
+        data.slug is string && data.slug.size() >= 1 && data.slug.size() <= 128 && data.slug.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 400 &&
+        data.heroImage is string && data.heroImage.size() <= 2048 &&
+        data.articleHtml is string && data.articleHtml.size() <= 100000 &&
+        (!('tag' in data) || (data.tag is string && data.tag.size() <= 120)) &&
+        (!('date' in data) || (data.date is string && data.date.size() <= 120)) &&
+        (!('author' in data) || (data.author is string && data.author.size() <= 200)) &&
+        (!('excerpt' in data) || (data.excerpt is string && data.excerpt.size() <= 2000)) &&
+        (!('description' in data) || (data.description is string && data.description.size() <= 2000)) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidMemoryDoc(data) {
+      return data.keys().hasAll(['id', 'category', 'fullImage', 'thumbImage', 'tag', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'category', 'fullImage', 'thumbImage', 'alt', 'tag', 'order', 'updatedBy', 'updatedAt']) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.category is string && data.category.size() <= 120 &&
+        data.fullImage is string && data.fullImage.size() <= 2048 &&
+        data.thumbImage is string && data.thumbImage.size() <= 2048 &&
+        data.tag is string && data.tag.size() <= 120 &&
+        (!('alt' in data) || (data.alt is string && data.alt.size() <= 500)) &&
+        (!('order' in data) || (data.order is number)) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidVideoDoc(data) {
+      return data.keys().hasAll(['id', 'youtubeId', 'number', 'title', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'youtubeId', 'number', 'title', 'subtitle', 'updatedBy', 'updatedAt']) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.youtubeId is string && data.youtubeId.size() >= 1 && data.youtubeId.size() <= 64 &&
+        data.number is string && data.number.size() <= 32 &&
+        data.title is string && data.title.size() <= 300 &&
+        (!('subtitle' in data) || (data.subtitle is string && data.subtitle.size() <= 500)) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidMiscAttractionDoc(data) {
+      return data.keys().hasAll(['id', 'image', 'title', 'description', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'image', 'alt', 'number', 'title', 'description', 'updatedBy', 'updatedAt']) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.image is string && data.image.size() <= 2048 &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 300 &&
+        data.description is string && data.description.size() <= 5000 &&
+        (!('alt' in data) || (data.alt is string && data.alt.size() <= 500)) &&
+        (!('number' in data) || (data.number is string && data.number.size() <= 32)) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidR2MediaDoc(data) {
+      return data.keys().hasAll(['id', 'url', 'label', 'category', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'url', 'r2Key', 'label', 'category', 'alt', 'updatedBy', 'updatedAt']) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.url is string && data.url.size() >= 1 && data.url.size() <= 2048 &&
+        data.label is string && data.label.size() <= 300 &&
+        data.category is string && data.category.size() <= 120 &&
+        (!('r2Key' in data) || (data.r2Key is string && data.r2Key.size() <= 1024)) &&
+        (!('alt' in data) || (data.alt is string && data.alt.size() <= 500)) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidHomeBlockDoc(data) {
+      return data.keys().hasAll(['id', 'blockType', 'title', 'updatedBy', 'updatedAt']) &&
+        data.keys().hasOnly([
+          'id', 'blockType', 'title', 'subtitle', 'text', 'image', 'extra',
+          'priceUsd', 'featured', 'order', 'items', 'updatedBy', 'updatedAt'
+        ]) &&
+        data.id is string && data.id.size() >= 1 && data.id.size() <= 128 && data.id.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.blockType is string && data.blockType.size() <= 64 &&
+        (
+          data.blockType == 'hero_slide' ||
+          data.blockType == 'service' ||
+          data.blockType == 'fleet' ||
+          data.blockType == 'review' ||
+          data.blockType == 'package_type' ||
+          data.blockType == 'lists_bundle' ||
+          data.blockType == 'resort_region'
+        ) &&
+        data.title is string && data.title.size() <= 500 &&
+        (!('subtitle' in data) || (data.subtitle is string && data.subtitle.size() <= 500)) &&
+        (!('text' in data) || (data.text is string && data.text.size() <= 5000)) &&
+        (!('image' in data) || (data.image is string && data.image.size() <= 2048)) &&
+        (!('extra' in data) || (data.extra is string && data.extra.size() <= 500)) &&
+        (!('priceUsd' in data) || (data.priceUsd is number)) &&
+        (!('featured' in data) || (data.featured is bool)) &&
+        (!('order' in data) || (data.order is number)) &&
+        (!('items' in data) || (data.items is list && data.items.size() <= 50 && (data.items.size() == 0 || data.items[0] is string || data.items[0] is map))) &&
+        data.updatedBy is string && data.updatedBy.size() <= 128 && data.updatedBy == request.auth.uid &&
+        data.updatedAt == request.time;
+    }
+
+    // 4. Collection Rules
+    match /admins/{adminId} {
+      allow get: if isSignedIn() && isValidId(adminId) && (request.auth.uid == adminId || isAdmin());
+      allow list: if false;
+      allow create: if isSignedIn() && isValidId(adminId) && isValidAdminUser(incoming()) && incoming().uid == adminId && isAdmin();
+      allow update: if isSignedIn() && isValidAdminUser(incoming()) && isValidId(adminId) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['email']) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(adminId) && isAdmin();
+    }
+
+    match /site_config/{configId} {
+      allow get: if isValidId(configId) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(configId) && isValidSiteConfigDoc(incoming()) && incoming().id == configId && isAdmin();
+      allow update: if isSignedIn() && isValidSiteConfigDoc(incoming()) && isValidId(configId) &&
+        incoming().id == existing().id &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'brandName', 'tagline', 'sltdaReg', 'founder', 'founderPhoto',
+          'phoneDisplay', 'phoneTel', 'whatsappUrl', 'whatsappNumber', 'viberUrl',
+          'email', 'googleMapsUrl', 'tripAdvisorUrl', 'facebookUrl',
+          'r2PublicDomain', 'r2UploadEndpoint',
+          'heroKicker', 'heroTitle', 'heroAccent', 'heroSubtitle',
+          'ayubowanKicker', 'ayubowanTitle', 'ayubowanAccent', 'ayubowanP1', 'ayubowanP2',
+          'visionText', 'missionText', 'promiseText', 'ctaBannerImage',
+          'refundPolicy', 'privacyPolicy', 'termsConditions', 'stats',
+          'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(configId) && isAdmin();
+    }
+
+    match /tours/{tourSlug} {
+      allow get: if isValidId(tourSlug) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(tourSlug) && isValidTourDoc(incoming()) && incoming().slug == tourSlug && isAdmin();
+      allow update: if isSignedIn() && isValidTourDoc(incoming()) && isValidId(tourSlug) &&
+        incoming().slug == existing().slug &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'type', 'title', 'h1Html', 'kicker', 'description', 'lead', 'introLead',
+          'heroImage', 'posterImage', 'priceUsd', 'durationLabel',
+          'metaChips', 'routeStops', 'days', 'highlights', 'travelDetails',
+          'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(tourSlug) && isAdmin();
+    }
+
+    match /destinations/{destSlug} {
+      allow get: if isValidId(destSlug) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(destSlug) && isValidDestinationDoc(incoming()) && incoming().slug == destSlug && isAdmin();
+      allow update: if isSignedIn() && isValidDestinationDoc(incoming()) && isValidId(destSlug) &&
+        incoming().slug == existing().slug &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'province', 'provinceShort', 'categorySlug', 'countLabel',
+          'description', 'lead', 'heroImage', 'cardImage', 'metaChips',
+          'introParagraphs', 'features', 'attractions', 'hotels', 'restaurants', 'relatedTourSlugs',
+          'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(destSlug) && isAdmin();
+    }
+
+    match /blogs/{blogSlug} {
+      allow get: if isValidId(blogSlug) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(blogSlug) && isValidBlogDoc(incoming()) && incoming().slug == blogSlug && isAdmin();
+      allow update: if isSignedIn() && isValidBlogDoc(incoming()) && isValidId(blogSlug) &&
+        incoming().slug == existing().slug &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'title', 'tag', 'date', 'author', 'excerpt', 'description',
+          'heroImage', 'articleHtml', 'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(blogSlug) && isAdmin();
+    }
+
+    match /memories/{memoryId} {
+      allow get: if isValidId(memoryId) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(memoryId) && isValidMemoryDoc(incoming()) && incoming().id == memoryId && isAdmin();
+      allow update: if isSignedIn() && isValidMemoryDoc(incoming()) && isValidId(memoryId) &&
+        incoming().id == existing().id &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'category', 'fullImage', 'thumbImage', 'alt', 'tag', 'order', 'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(memoryId) && isAdmin();
+    }
+
+    match /videos/{videoId} {
+      allow get: if isValidId(videoId) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(videoId) && isValidVideoDoc(incoming()) && incoming().id == videoId && isAdmin();
+      allow update: if isSignedIn() && isValidVideoDoc(incoming()) && isValidId(videoId) &&
+        incoming().id == existing().id &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'youtubeId', 'number', 'title', 'subtitle', 'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(videoId) && isAdmin();
+    }
+
+    match /misc_attractions/{miscId} {
+      allow get: if isValidId(miscId) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(miscId) && isValidMiscAttractionDoc(incoming()) && incoming().id == miscId && isAdmin();
+      allow update: if isSignedIn() && isValidMiscAttractionDoc(incoming()) && isValidId(miscId) &&
+        incoming().id == existing().id &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'image', 'alt', 'number', 'title', 'description', 'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(miscId) && isAdmin();
+    }
+
+    match /r2_media/{mediaId} {
+      allow get: if isValidId(mediaId) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(mediaId) && isValidR2MediaDoc(incoming()) && incoming().id == mediaId && isAdmin();
+      allow update: if isSignedIn() && isValidR2MediaDoc(incoming()) && isValidId(mediaId) &&
+        incoming().id == existing().id &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'url', 'r2Key', 'label', 'category', 'alt', 'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(mediaId) && isAdmin();
+    }
+
+    match /home_blocks/{blockId} {
+      allow get: if isValidId(blockId) && resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow list: if resource.data.updatedBy is string && resource.data.updatedBy.size() <= 128;
+      allow create: if isSignedIn() && isValidId(blockId) && isValidHomeBlockDoc(incoming()) && incoming().id == blockId && isAdmin();
+      allow update: if isSignedIn() && isValidHomeBlockDoc(incoming()) && isValidId(blockId) &&
+        incoming().id == existing().id &&
+        incoming().diff(existing()).affectedKeys().hasOnly([
+          'blockType', 'title', 'subtitle', 'text', 'image', 'extra',
+          'priceUsd', 'featured', 'order', 'items', 'updatedBy', 'updatedAt'
+        ]) &&
+        isAdmin();
+      allow delete: if isSignedIn() && isValidId(blockId) && isAdmin();
+    }
+  }
+}

@@ -1,0 +1,351 @@
+{
+  "entities": {
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Administrator account record with role verification.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "description": "Firebase Auth UID of the administrator."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 256,
+          "description": "Verified email address of the administrator."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the admin record was created."
+        }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "SiteConfigDoc": {
+      "title": "SiteConfigDoc",
+      "description": "Global site configuration, contact info, copy, and R2 CDN settings.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "brandName": { "type": "string", "maxLength": 200 },
+        "tagline": { "type": "string", "maxLength": 300 },
+        "sltdaReg": { "type": "string", "maxLength": 120 },
+        "founder": { "type": "string", "maxLength": 200 },
+        "founderPhoto": { "type": "string", "maxLength": 2048 },
+        "phoneDisplay": { "type": "string", "maxLength": 80 },
+        "phoneTel": { "type": "string", "maxLength": 80 },
+        "whatsappUrl": { "type": "string", "maxLength": 500 },
+        "whatsappNumber": { "type": "string", "maxLength": 60 },
+        "viberUrl": { "type": "string", "maxLength": 500 },
+        "email": { "type": "string", "maxLength": 256 },
+        "googleMapsUrl": { "type": "string", "maxLength": 2048 },
+        "tripAdvisorUrl": { "type": "string", "maxLength": 2048 },
+        "facebookUrl": { "type": "string", "maxLength": 2048 },
+        "r2PublicDomain": { "type": "string", "maxLength": 1024 },
+        "r2UploadEndpoint": { "type": "string", "maxLength": 1024 },
+        "heroKicker": { "type": "string", "maxLength": 300 },
+        "heroTitle": { "type": "string", "maxLength": 300 },
+        "heroAccent": { "type": "string", "maxLength": 300 },
+        "heroSubtitle": { "type": "string", "maxLength": 2000 },
+        "ayubowanKicker": { "type": "string", "maxLength": 300 },
+        "ayubowanTitle": { "type": "string", "maxLength": 300 },
+        "ayubowanAccent": { "type": "string", "maxLength": 300 },
+        "ayubowanP1": { "type": "string", "maxLength": 4000 },
+        "ayubowanP2": { "type": "string", "maxLength": 4000 },
+        "visionText": { "type": "string", "maxLength": 1000 },
+        "missionText": { "type": "string", "maxLength": 1000 },
+        "promiseText": { "type": "string", "maxLength": 1000 },
+        "ctaBannerImage": { "type": "string", "maxLength": 2048 },
+        "refundPolicy": { "type": "string", "maxLength": 10000 },
+        "privacyPolicy": { "type": "string", "maxLength": 20000 },
+        "termsConditions": { "type": "string", "maxLength": 20000 },
+        "stats": { "type": "array" },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "brandName",
+        "tagline",
+        "phoneDisplay",
+        "email",
+        "updatedBy",
+        "updatedAt"
+      ]
+    },
+    "TourDoc": {
+      "title": "TourDoc",
+      "description": "Multi-day theme tour or single-day BIA tour package.",
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "type": { "type": "string", "enum": ["multi-day", "day"], "maxLength": 32 },
+        "title": { "type": "string", "maxLength": 300 },
+        "h1Html": { "type": "string", "maxLength": 600 },
+        "kicker": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "lead": { "type": "string", "maxLength": 4000 },
+        "introLead": { "type": "string", "maxLength": 4000 },
+        "heroImage": { "type": "string", "maxLength": 2048 },
+        "posterImage": { "type": "string", "maxLength": 2048 },
+        "priceUsd": { "type": "number" },
+        "durationLabel": { "type": "string", "maxLength": 120 },
+        "metaChips": { "type": "array" },
+        "routeStops": { "type": "array" },
+        "days": { "type": "array" },
+        "highlights": { "type": "array" },
+        "travelDetails": { "type": "array" },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "slug",
+        "type",
+        "title",
+        "heroImage",
+        "priceUsd",
+        "updatedBy",
+        "updatedAt"
+      ]
+    },
+    "DestinationDoc": {
+      "title": "DestinationDoc",
+      "description": "Destination guide with attractions, features, hotels, and restaurants.",
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": { "type": "string", "maxLength": 200 },
+        "province": { "type": "string", "maxLength": 200 },
+        "provinceShort": { "type": "string", "maxLength": 120 },
+        "categorySlug": { "type": "string", "maxLength": 120 },
+        "countLabel": { "type": "string", "maxLength": 120 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "lead": { "type": "string", "maxLength": 4000 },
+        "heroImage": { "type": "string", "maxLength": 2048 },
+        "cardImage": { "type": "string", "maxLength": 2048 },
+        "metaChips": { "type": "array" },
+        "introParagraphs": { "type": "array" },
+        "features": { "type": "array" },
+        "attractions": { "type": "array" },
+        "hotels": { "type": "array" },
+        "restaurants": { "type": "array" },
+        "relatedTourSlugs": { "type": "array" },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "slug",
+        "name",
+        "heroImage",
+        "cardImage",
+        "updatedBy",
+        "updatedAt"
+      ]
+    },
+    "BlogDoc": {
+      "title": "BlogDoc",
+      "description": "Blog post article with HTML content and R2 hero image.",
+      "type": "object",
+      "properties": {
+        "slug": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "title": { "type": "string", "maxLength": 400 },
+        "tag": { "type": "string", "maxLength": 120 },
+        "date": { "type": "string", "maxLength": 120 },
+        "author": { "type": "string", "maxLength": 200 },
+        "excerpt": { "type": "string", "maxLength": 2000 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "heroImage": { "type": "string", "maxLength": 2048 },
+        "articleHtml": { "type": "string", "maxLength": 100000 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "slug",
+        "title",
+        "heroImage",
+        "articleHtml",
+        "updatedBy",
+        "updatedAt"
+      ]
+    },
+    "MemoryDoc": {
+      "title": "MemoryDoc",
+      "description": "Guest memory gallery photo item.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "category": { "type": "string", "maxLength": 120 },
+        "fullImage": { "type": "string", "maxLength": 2048 },
+        "thumbImage": { "type": "string", "maxLength": 2048 },
+        "alt": { "type": "string", "maxLength": 500 },
+        "tag": { "type": "string", "maxLength": 120 },
+        "order": { "type": "number" },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "category",
+        "fullImage",
+        "thumbImage",
+        "tag",
+        "updatedBy",
+        "updatedAt"
+      ]
+    },
+    "VideoDoc": {
+      "title": "VideoDoc",
+      "description": "To-Do YouTube video item.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "youtubeId": { "type": "string", "maxLength": 64 },
+        "number": { "type": "string", "maxLength": 32 },
+        "title": { "type": "string", "maxLength": 300 },
+        "subtitle": { "type": "string", "maxLength": 500 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "youtubeId", "number", "title", "updatedBy", "updatedAt"]
+    },
+    "MiscAttractionDoc": {
+      "title": "MiscAttractionDoc",
+      "description": "Miscellaneous off-the-beaten-path attraction.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "image": { "type": "string", "maxLength": 2048 },
+        "alt": { "type": "string", "maxLength": 500 },
+        "number": { "type": "string", "maxLength": 32 },
+        "title": { "type": "string", "maxLength": 300 },
+        "description": { "type": "string", "maxLength": 5000 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "image", "title", "description", "updatedBy", "updatedAt"]
+    },
+    "R2MediaDoc": {
+      "title": "R2MediaDoc",
+      "description": "Cloudflare R2 CDN image asset reference stored in Firestore.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "url": { "type": "string", "maxLength": 2048 },
+        "r2Key": { "type": "string", "maxLength": 1024 },
+        "label": { "type": "string", "maxLength": 300 },
+        "category": { "type": "string", "maxLength": 120 },
+        "alt": { "type": "string", "maxLength": 500 },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "url", "label", "category", "updatedBy", "updatedAt"]
+    },
+    "HomeBlockDoc": {
+      "title": "HomeBlockDoc",
+      "description": "Editable home and global sections (hero slides, fleet vehicles, services, reviews, package types, notes, resort regions).",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "blockType": {
+          "type": "string",
+          "enum": ["hero_slide", "service", "fleet", "review", "package_type", "lists_bundle", "resort_region"],
+          "maxLength": 64
+        },
+        "title": { "type": "string", "maxLength": 500 },
+        "subtitle": { "type": "string", "maxLength": 500 },
+        "text": { "type": "string", "maxLength": 5000 },
+        "image": { "type": "string", "maxLength": 2048 },
+        "extra": { "type": "string", "maxLength": 500 },
+        "priceUsd": { "type": "number" },
+        "featured": { "type": "boolean" },
+        "order": { "type": "number" },
+        "items": { "type": "array" },
+        "updatedBy": { "type": "string", "maxLength": 128 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "blockType", "title", "updatedBy", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Administrator records."
+    },
+    "/site_config/{configId}": {
+      "schema": { "$ref": "#/entities/SiteConfigDoc" },
+      "description": "Global site settings, copy, and R2 CDN settings."
+    },
+    "/tours/{tourSlug}": {
+      "schema": { "$ref": "#/entities/TourDoc" },
+      "description": "Tour packages (multi-day and day tours)."
+    },
+    "/destinations/{destSlug}": {
+      "schema": { "$ref": "#/entities/DestinationDoc" },
+      "description": "Sri Lanka destinations with attractions, hotels, and restaurants."
+    },
+    "/blogs/{blogSlug}": {
+      "schema": { "$ref": "#/entities/BlogDoc" },
+      "description": "Blog articles."
+    },
+    "/memories/{memoryId}": {
+      "schema": { "$ref": "#/entities/MemoryDoc" },
+      "description": "Guest memory photos."
+    },
+    "/videos/{videoId}": {
+      "schema": { "$ref": "#/entities/VideoDoc" },
+      "description": "To-Do YouTube videos."
+    },
+    "/misc_attractions/{miscId}": {
+      "schema": { "$ref": "#/entities/MiscAttractionDoc" },
+      "description": "Miscellaneous attractions."
+    },
+    "/r2_media/{mediaId}": {
+      "schema": { "$ref": "#/entities/R2MediaDoc" },
+      "description": "Cloudflare R2 CDN image links library."
+    },
+    "/home_blocks/{blockId}": {
+      "schema": { "$ref": "#/entities/HomeBlockDoc" },
+      "description": "Editable home/global content blocks."
+    }
+  }
+}

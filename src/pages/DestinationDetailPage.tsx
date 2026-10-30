@@ -5,13 +5,11 @@ import {
   ArrowRight,
   ExternalLink,
   Hotel,
-  MapPin,
   Sparkles,
   Utensils,
 } from 'lucide-react';
-import { DESTINATIONS } from '../data/destinations';
-import { TOURS } from '../data/tours';
 import { useCurrency } from '../context/CurrencyContext';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { Lightbox, LightboxItem } from '../components/shared/Lightbox';
 import { CtaBand } from '../components/shared/CtaBand';
@@ -19,6 +17,7 @@ import { CtaBand } from '../components/shared/CtaBand';
 export const DestinationDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { formatPrice } = useCurrency();
+  const { destinations: DESTINATIONS, tours: TOURS } = useCMS();
   const [lbIndex, setLbIndex] = useState<number | null>(null);
 
   const destIndex = DESTINATIONS.findIndex((d) => d.slug === slug);
@@ -32,11 +31,22 @@ export const DestinationDetailPage: React.FC = () => {
 
   const relatedTours = TOURS.filter((t) => dest.relatedTourSlugs.includes(t.slug));
 
-  const lightboxItems: LightboxItem[] = dest.attractions.map((a) => ({
-    src: a.image,
-    caption: `${a.number} — ${a.title}`,
-    alt: a.alt || a.title,
-  }));
+  const featureLightboxItems: LightboxItem[] = dest.features.flatMap((f) =>
+    f.images.map((im) => ({
+      src: im.src,
+      caption: f.title,
+      alt: im.alt || f.title,
+    }))
+  );
+
+  const lightboxItems: LightboxItem[] = [
+    ...dest.attractions.map((a) => ({
+      src: a.image,
+      caption: `${a.number} — ${a.title}`,
+      alt: a.alt || a.title,
+    })),
+    ...featureLightboxItems,
+  ];
 
   return (
     <div>
@@ -94,42 +104,69 @@ export const DestinationDetailPage: React.FC = () => {
               </div>
             )}
 
-            {dest.features.map((feat, fIdx) => (
-              <div
-                key={feat.title + fIdx}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white rounded-3xl p-6 md:p-10 border border-black/5 shadow-xs"
-              >
+            {dest.features.map((feat, fIdx) => {
+              const hasImages = feat.images && feat.images.length > 0;
+              const hasText = feat.paragraphs && feat.paragraphs.length > 0;
+              return (
                 <div
-                  className={`lg:col-span-6 grid gap-3 ${
-                    feat.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1'
-                  } ${fIdx % 2 === 1 ? 'lg:order-2' : ''}`}
+                  key={feat.title + fIdx}
+                  className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white rounded-3xl p-6 md:p-10 border border-black/5 shadow-xs"
                 >
-                  {feat.images.slice(0, 4).map((im, iIdx) => (
+                  {hasImages && (
                     <div
-                      key={im.src + iIdx}
-                      className="rounded-2xl overflow-hidden h-48 sm:h-56 bg-[#faf6ee]"
+                      className={`${
+                        hasText
+                          ? 'lg:col-span-6 grid gap-3 ' +
+                            (feat.images.length > 1 ? 'grid-cols-2' : 'grid-cols-1')
+                          : 'lg:col-span-12 grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4'
+                      } ${hasText && fIdx % 2 === 1 ? 'lg:order-2' : ''}`}
                     >
-                      <SmartImage
-                        src={im.src}
-                        alt={im.alt || feat.title}
-                        className="w-full h-full object-cover"
-                      />
+                      {!hasText && (
+                        <div className="col-span-full mb-1">
+                          <span className="font-hand text-2xl text-[#c88a2b] block">
+                            {feat.kicker}
+                          </span>
+                          <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#141413]">
+                            {feat.title}
+                          </h3>
+                        </div>
+                      )}
+                      {feat.images.map((im, iIdx) => (
+                        <div
+                          key={im.src + iIdx}
+                          className="rounded-2xl overflow-hidden h-44 sm:h-52 bg-[#faf6ee]"
+                        >
+                          <SmartImage
+                            src={im.src}
+                            alt={im.alt || feat.title}
+                            className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
+                  {hasText && (
+                    <div
+                      className={`${hasImages ? 'lg:col-span-6' : 'lg:col-span-12'} space-y-3 ${
+                        hasImages && fIdx % 2 === 1 ? 'lg:order-1' : ''
+                      }`}
+                    >
+                      <span className="font-hand text-2xl text-[#c88a2b] block">
+                        {feat.kicker}
+                      </span>
+                      <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#141413]">
+                        {feat.title}
+                      </h3>
+                      {feat.paragraphs.map((p, pIdx) => (
+                        <p key={pIdx} className="text-sm text-[#4a4742] leading-relaxed">
+                          {p}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className={`lg:col-span-6 space-y-3 ${fIdx % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <span className="font-hand text-2xl text-[#c88a2b] block">{feat.kicker}</span>
-                  <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#141413]">
-                    {feat.title}
-                  </h3>
-                  {feat.paragraphs.map((p, pIdx) => (
-                    <p key={pIdx} className="text-sm text-[#4a4742] leading-relaxed">
-                      {p}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

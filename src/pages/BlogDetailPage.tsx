@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { ArrowRight, Calendar, MessageCircle, User } from 'lucide-react';
-import { BlogPost, BLOGS } from '../data/blogs';
-import { SITE_CONFIG } from '../data/siteConfig';
+import { BlogPost } from '../data/blogs';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 
 interface BlogDetailPageProps {
@@ -10,6 +10,7 @@ interface BlogDetailPageProps {
 }
 
 export const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ post }) => {
+  const { blogs: BLOGS, siteConfig: SITE_CONFIG } = useCMS();
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

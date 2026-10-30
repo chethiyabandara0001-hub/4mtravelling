@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Play, X, Compass } from 'lucide-react';
-import { VIDEOS } from '../data/videos';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { CtaBand } from '../components/shared/CtaBand';
 
 export const ToDoPage: React.FC = () => {
+  const { videos: VIDEOS } = useCMS();
   const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
 
   return (

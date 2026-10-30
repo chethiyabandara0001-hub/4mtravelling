@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, Search } from 'lucide-react';
-import { BLOGS } from '../data/blogs';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { CtaBand } from '../components/shared/CtaBand';
 
 export const BlogsPage: React.FC = () => {
+  const { blogs: BLOGS } = useCMS();
   const [query, setQuery] = useState('');
 
   const filtered = BLOGS.filter(

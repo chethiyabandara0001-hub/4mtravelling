@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Phone, Mail, MessageCircle } from 'lucide-react';
-import { SITE_CONFIG } from '../../data/siteConfig';
+import { useCMS } from '../../context/CMSContext';
 import { SmartImage } from './SmartImage';
 
 interface CtaBandProps {
@@ -19,12 +19,17 @@ export const CtaBand: React.FC<CtaBandProps> = ({
   description = 'Tell Kura your dates, interests and budget — he will shape a private itinerary around you. Asking is free and there is no obligation.',
   showEmail = false,
 }) => {
+  const { siteConfig } = useCMS();
+
   return (
     <section className="py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="relative rounded-3xl overflow-hidden bg-[#141413] text-white p-8 md:p-14 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-2xl">
           <SmartImage
-            src="https://4melankatours.com/wp-content/uploads/2024/06/ella-banner-5.webp"
+            src={
+              siteConfig.ctaBannerImage ||
+              'https://4melankatours.com/wp-content/uploads/2024/06/ella-banner-5.webp'
+            }
             alt=""
             className="absolute inset-0 w-full h-full object-cover opacity-25 pointer-events-none"
           />
@@ -43,7 +48,7 @@ export const CtaBand: React.FC<CtaBandProps> = ({
               Plan my trip <ArrowRight className="w-4 h-4" />
             </Link>
             <a
-              href={SITE_CONFIG.whatsappUrl}
+              href={siteConfig.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1ebe5a] text-white font-semibold px-6 py-3.5 rounded-full text-sm transition"
@@ -52,17 +57,17 @@ export const CtaBand: React.FC<CtaBandProps> = ({
             </a>
             {showEmail ? (
               <a
-                href={`mailto:${SITE_CONFIG.email}`}
+                href={`mailto:${siteConfig.email}`}
                 className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-3.5 rounded-full text-sm transition border border-white/20"
               >
                 <Mail className="w-4 h-4" /> Email Kura
               </a>
             ) : (
               <a
-                href={SITE_CONFIG.phoneTel}
+                href={siteConfig.phoneTel}
                 className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-3.5 rounded-full text-sm transition border border-white/20"
               >
-                <Phone className="w-4 h-4" /> {SITE_CONFIG.phoneDisplay}
+                <Phone className="w-4 h-4" /> {siteConfig.phoneDisplay}
               </a>
             )}
           </div>

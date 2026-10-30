@@ -13,15 +13,12 @@ import {
   Calculator,
   MessageCircle,
   ExternalLink,
+  ShieldCheck,
 } from 'lucide-react';
-import { SITE_CONFIG, CURRENCIES, USEFUL_LINKS } from '../../data/siteConfig';
-import { TOURS } from '../../data/tours';
-import { DESTINATIONS } from '../../data/destinations';
+import { CURRENCIES, USEFUL_LINKS } from '../../data/siteConfig';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useCMS } from '../../context/CMSContext';
 import { SmartImage } from '../shared/SmartImage';
-
-const multiDayTours = TOURS.filter((t) => t.type === 'multi-day');
-const dayTours = TOURS.filter((t) => t.type === 'day');
 
 const PROVINCE_GROUPS = [
   { label: 'Western', slug: 'western-province' },
@@ -38,11 +35,15 @@ const PROVINCE_GROUPS = [
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const { currency, setCurrency, formatPrice, isCalcOpen, setIsCalcOpen } = useCurrency();
+  const { siteConfig, tours, destinations, isAdmin } = useCMS();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showTopBtn, setShowTopBtn] = useState(false);
   const [calcAmount, setCalcAmount] = useState<string>('100');
   const [calcFrom, setCalcFrom] = useState<string>('USD');
   const [calcTo, setCalcTo] = useState<string>('LKR');
+
+  const multiDayTours = tours.filter((t) => t.type === 'multi-day');
+  const dayTours = tours.filter((t) => t.type === 'day');
 
   useEffect(() => {
     setDrawerOpen(false);
@@ -77,7 +78,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-4">
             <a
-              href={SITE_CONFIG.googleMapsUrl}
+              href={siteConfig.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 hover:text-[#f5c56b] transition"
@@ -85,10 +86,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <MapPin className="w-3.5 h-3.5 text-[#c88a2b]" /> Colombo, Sri Lanka
             </a>
             <a
-              href={`mailto:${SITE_CONFIG.email}`}
+              href={`mailto:${siteConfig.email}`}
               className="hidden sm:inline-flex items-center gap-1.5 hover:text-[#f5c56b] transition"
             >
-              <Mail className="w-3.5 h-3.5 text-[#c88a2b]" /> {SITE_CONFIG.email}
+              <Mail className="w-3.5 h-3.5 text-[#c88a2b]" /> {siteConfig.email}
             </a>
           </div>
           <div className="flex items-center gap-3">
@@ -98,6 +99,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <span className="hidden md:inline-flex items-center gap-1 text-white/70">
               <Clock className="w-3.5 h-3.5 text-[#25D366]" /> Open 24/7
             </span>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1 bg-white/10 hover:bg-[#c88a2b] text-white px-2.5 py-0.5 rounded-full font-semibold transition"
+            >
+              <ShieldCheck className="w-3 h-3 text-[#f5c56b]" />
+              {isAdmin ? 'CMS Admin' : 'Admin'}
+            </Link>
           </div>
         </div>
       </div>
@@ -113,10 +121,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             />
             <div>
               <span className="font-serif text-lg sm:text-xl font-bold tracking-tight block leading-none text-white group-hover:text-[#f5c56b] transition">
-                {SITE_CONFIG.brandName}
+                {siteConfig.brandName}
               </span>
               <small className="font-hand text-sm text-[#f5c56b] block mt-0.5">
-                {SITE_CONFIG.tagline}
+                {siteConfig.tagline}
               </small>
             </div>
           </Link>
@@ -217,7 +225,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 <div className="bg-[#1b1a18] border border-white/15 rounded-2xl p-6 shadow-2xl">
                   <div className="grid grid-cols-5 gap-4 text-left">
                     {PROVINCE_GROUPS.map((prov) => {
-                      const provDests = DESTINATIONS.filter((d) => d.categorySlug === prov.slug);
+                      const provDests = destinations.filter((d) => d.categorySlug === prov.slug);
                       return (
                         <div key={prov.slug}>
                           <h5 className="text-[11px] font-bold uppercase tracking-wider text-[#f5c56b] mb-2">
@@ -245,17 +253,20 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                         to="/miscellaneous-attractions"
                         className="block text-xs py-1 px-2 rounded hover:bg-white/10 text-[#f5c56b] font-semibold transition"
                       >
-                        13 Misc. Attractions →
+                        Misc. Attractions →
                       </Link>
                     </div>
                   </div>
                   <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-white/75">
-                    <span>29 hand-picked destinations across all 9 provinces of Sri Lanka</span>
+                    <span>
+                      {destinations.length} hand-picked destinations across all 9 provinces of Sri
+                      Lanka
+                    </span>
                     <Link
                       to="/destinations"
                       className="inline-flex items-center gap-1 text-[#f5c56b] font-semibold hover:underline"
                     >
-                      All 29 destinations <ArrowRight className="w-3.5 h-3.5" />
+                      All {destinations.length} destinations <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </div>
@@ -328,11 +339,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
 
             <a
-              href={SITE_CONFIG.phoneTel}
+              href={siteConfig.phoneTel}
               className="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-white/90 hover:text-[#f5c56b] px-2.5 py-2"
             >
               <Phone className="w-3.5 h-3.5 text-[#c88a2b]" />
-              {SITE_CONFIG.phoneDisplay}
+              {siteConfig.phoneDisplay}
             </a>
 
             <Link
@@ -366,7 +377,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     alt=""
                     className="w-9 h-9 rounded-full"
                   />
-                  <span className="font-serif font-bold text-lg">{SITE_CONFIG.brandName}</span>
+                  <span className="font-serif font-bold text-lg">{siteConfig.brandName}</span>
                 </Link>
                 <button
                   type="button"
@@ -387,14 +398,14 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 </Link>
                 <details className="group rounded-xl bg-white/5 px-3 py-2">
                   <summary className="cursor-pointer font-medium py-1 flex items-center justify-between">
-                    <span>Tour Packages (18)</span>
+                    <span>Tour Packages ({tours.length})</span>
                     <ChevronDown className="w-4 h-4" />
                   </summary>
                   <div className="mt-2 pl-2 space-y-1.5 border-l border-white/15 text-xs">
                     <Link to="/tour-packages" className="block py-1 text-[#f5c56b] font-bold">
                       All Tour Packages →
                     </Link>
-                    {TOURS.map((t) => (
+                    {tours.map((t) => (
                       <Link
                         key={t.slug}
                         to={`/${t.slug}`}
@@ -408,14 +419,14 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
                 <details className="group rounded-xl bg-white/5 px-3 py-2">
                   <summary className="cursor-pointer font-medium py-1 flex items-center justify-between">
-                    <span>Destinations (29)</span>
+                    <span>Destinations ({destinations.length})</span>
                     <ChevronDown className="w-4 h-4" />
                   </summary>
                   <div className="mt-2 pl-2 space-y-1.5 border-l border-white/15 text-xs max-h-60 overflow-y-auto">
                     <Link to="/destinations" className="block py-1 text-[#f5c56b] font-bold">
-                      All 29 Destinations →
+                      All {destinations.length} Destinations →
                     </Link>
-                    {DESTINATIONS.map((d) => (
+                    {destinations.map((d) => (
                       <Link
                         key={d.slug}
                         to={`/destinations/${d.slug}`}
@@ -437,19 +448,19 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   to="/to-do"
                   className="block py-2.5 px-3 rounded-xl hover:bg-white/10 font-medium"
                 >
-                  To Do (26 Videos)
+                  To Do Videos
                 </Link>
                 <Link
                   to="/memories"
                   className="block py-2.5 px-3 rounded-xl hover:bg-white/10 font-medium"
                 >
-                  Guest Memories (116)
+                  Guest Memories
                 </Link>
                 <Link
                   to="/blogs"
                   className="block py-2.5 px-3 rounded-xl hover:bg-white/10 font-medium"
                 >
-                  Sri Lanka Blogs (19)
+                  Sri Lanka Blogs
                 </Link>
                 <Link
                   to="/contact-us"
@@ -457,12 +468,18 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 >
                   Contact Us
                 </Link>
+                <Link
+                  to="/admin"
+                  className="block py-2.5 px-3 rounded-xl bg-[#c88a2b]/20 text-[#f5c56b] font-bold"
+                >
+                  CMS Admin Panel
+                </Link>
               </nav>
             </div>
 
             <div className="pt-6 border-t border-white/10 space-y-2.5">
               <a
-                href={SITE_CONFIG.whatsappUrl}
+                href={siteConfig.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center gap-2 bg-[#25D366] text-white font-semibold py-3 rounded-full text-sm"
@@ -470,10 +487,10 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 <MessageCircle className="w-4 h-4" /> Chat on WhatsApp
               </a>
               <a
-                href={SITE_CONFIG.phoneTel}
+                href={siteConfig.phoneTel}
                 className="w-full inline-flex items-center justify-center gap-2 bg-white/10 text-white font-semibold py-3 rounded-full text-sm"
               >
-                <Phone className="w-4 h-4" /> {SITE_CONFIG.phoneDisplay}
+                <Phone className="w-4 h-4" /> {siteConfig.phoneDisplay}
               </a>
             </div>
           </div>
@@ -604,18 +621,14 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                   className="w-11 h-11 rounded-full"
                 />
                 <span className="font-serif text-xl font-bold text-white">
-                  {SITE_CONFIG.brandName}
+                  {siteConfig.brandName}
                 </span>
               </Link>
               <p className="text-sm text-white/65 mt-4 leading-relaxed">
                 A family-run, SLTDA registered travel company offering private round tours, day
                 tours and airport transfers across Sri Lanka since 2019.
               </p>
-              <div className="font-hand text-2xl text-[#f5c56b] mt-4">
-                Say Hi as Guests,
-                <br />
-                Bye as Friends…
-              </div>
+              <div className="font-hand text-2xl text-[#f5c56b] mt-4">{siteConfig.tagline}</div>
               <div className="mt-4 flex items-center gap-2 text-xs text-[#f5c56b] font-semibold">
                 <span>🏆 TripAdvisor Travelers’ Choice 2023 · 2024 · 2025</span>
               </div>
@@ -631,12 +644,12 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                 </li>
                 <li>
                   <Link to="/tour-packages" className="hover:text-[#f5c56b] transition">
-                    Tour packages (18)
+                    Tour packages ({tours.length})
                   </Link>
                 </li>
                 <li>
                   <Link to="/destinations" className="hover:text-[#f5c56b] transition">
-                    Destinations (29)
+                    Destinations ({destinations.length})
                   </Link>
                 </li>
                 <li>
@@ -672,6 +685,11 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     Terms & privacy policy
                   </Link>
                 </li>
+                <li>
+                  <Link to="/admin" className="text-[#f5c56b] hover:underline font-semibold">
+                    CMS Admin Panel
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -698,36 +716,36 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               <ul className="space-y-3 text-sm">
                 <li>
                   <a
-                    href={SITE_CONFIG.phoneTel}
+                    href={siteConfig.phoneTel}
                     className="flex items-center gap-2.5 hover:text-[#f5c56b] transition"
                   >
                     <Phone className="w-4 h-4 text-[#c88a2b] shrink-0" />
-                    <span>Voice: {SITE_CONFIG.phoneDisplay}</span>
+                    <span>Voice: {siteConfig.phoneDisplay}</span>
                   </a>
                 </li>
                 <li>
                   <a
-                    href={SITE_CONFIG.whatsappUrl}
+                    href={siteConfig.whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2.5 hover:text-[#f5c56b] transition"
                   >
                     <MessageCircle className="w-4 h-4 text-[#25D366] shrink-0" />
-                    <span>WhatsApp: {SITE_CONFIG.phoneDisplay}</span>
+                    <span>WhatsApp: {siteConfig.phoneDisplay}</span>
                   </a>
                 </li>
                 <li>
                   <a
-                    href={`mailto:${SITE_CONFIG.email}`}
+                    href={`mailto:${siteConfig.email}`}
                     className="flex items-center gap-2.5 hover:text-[#f5c56b] transition"
                   >
                     <Mail className="w-4 h-4 text-[#c88a2b] shrink-0" />
-                    <span>{SITE_CONFIG.email}</span>
+                    <span>{siteConfig.email}</span>
                   </a>
                 </li>
                 <li>
                   <a
-                    href={SITE_CONFIG.googleMapsUrl}
+                    href={siteConfig.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-start gap-2.5 hover:text-[#f5c56b] transition"
@@ -736,7 +754,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     <span>
                       Colombo, Sri Lanka
                       <br />
-                      <small className="text-white/50">{SITE_CONFIG.sltdaReg}</small>
+                      <small className="text-white/50">{siteConfig.sltdaReg}</small>
                     </span>
                   </a>
                 </li>
@@ -746,7 +764,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
           <div className="pt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-white/50">
             <span>
-              © 2022–{new Date().getFullYear()} 4Me Lanka Tours. Powered by KuRa with SithK –
+              © 2022–{new Date().getFullYear()} {siteConfig.brandName}. Powered by KuRa with SithK –
               LineWork Graphics.
             </span>
             <span>Ayubowan! 🙏</span>
@@ -759,7 +777,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 
       {/* Floating WhatsApp FAB (Desktop) */}
       <a
-        href={`${SITE_CONFIG.whatsappUrl}?text=${encodeURIComponent(
+        href={`${siteConfig.whatsappUrl}?text=${encodeURIComponent(
           'Ayubowan Kura! I would like to plan a trip to Sri Lanka.'
         )}`}
         target="_blank"
@@ -787,13 +805,13 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#141413]/95 backdrop-blur-md border-t border-white/15 grid grid-cols-3 text-xs font-semibold text-white"
       >
         <a
-          href={SITE_CONFIG.phoneTel}
+          href={siteConfig.phoneTel}
           className="py-3.5 flex items-center justify-center gap-1.5 border-r border-white/10"
         >
           <Phone className="w-4 h-4 text-[#f5c56b]" /> Call
         </a>
         <a
-          href={SITE_CONFIG.whatsappUrl}
+          href={siteConfig.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="py-3.5 flex items-center justify-center gap-1.5 bg-[#25D366] text-white"

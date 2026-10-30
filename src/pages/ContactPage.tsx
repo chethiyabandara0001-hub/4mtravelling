@@ -9,12 +9,13 @@ import {
   Send,
   ShieldCheck,
 } from 'lucide-react';
-import { SITE_CONFIG, FLEET } from '../data/siteConfig';
 import { useCurrency } from '../context/CurrencyContext';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 
 export const ContactPage: React.FC = () => {
   const { formatPrice } = useCurrency();
+  const { siteConfig: SITE_CONFIG, fleet: FLEET } = useCMS();
   const [activeTab, setActiveTab] = useState<'tour' | 'transfer'>('tour');
 
   // Round Tour Form State
@@ -77,7 +78,8 @@ export const ContactPage: React.FC = () => {
       {/* Hero */}
       <section className="relative bg-[#141413] text-white py-20 md:py-28 overflow-hidden">
         <SmartImage
-          src="https://4melankatours.com/wp-content/uploads/2024/06/ella-banner-5.webp"
+          src="https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/contact-us.jpg"
+          fallbackSrc="https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/06/ella-banner-5.webp"
           alt="Contact 4Me Lanka Tours"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />

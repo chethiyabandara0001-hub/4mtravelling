@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Compass, MapPin } from 'lucide-react';
-import { DESTINATIONS } from '../data/destinations';
-import { RESORT_REGIONS } from '../data/siteConfig';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { CtaBand } from '../components/shared/CtaBand';
 
 const PROVINCE_FILTERS = [
-  { key: 'all', label: 'All', count: 29 },
-  { key: 'central-province', label: 'Central', count: 6 },
-  { key: 'southern-province', label: 'Southern', count: 9 },
-  { key: 'eastern-province', label: 'Eastern', count: 3 },
-  { key: 'western-province', label: 'Western', count: 2 },
-  { key: 'north-central-province', label: 'North Central', count: 2 },
-  { key: 'northern-province', label: 'Northern', count: 2 },
-  { key: 'uva-province', label: 'Uva', count: 3 },
-  { key: 'sabaragamuwa-province', label: 'Sabaragamuwa', count: 2 },
+  { key: 'all', label: 'All' },
+  { key: 'central-province', label: 'Central' },
+  { key: 'southern-province', label: 'Southern' },
+  { key: 'eastern-province', label: 'Eastern' },
+  { key: 'western-province', label: 'Western' },
+  { key: 'north-central-province', label: 'North Central' },
+  { key: 'northern-province', label: 'Northern' },
+  { key: 'uva-province', label: 'Uva' },
+  { key: 'sabaragamuwa-province', label: 'Sabaragamuwa' },
 ];
 
 export const DestinationsPage: React.FC = () => {
+  const { destinations: DESTINATIONS, resortRegions: RESORT_REGIONS } = useCMS();
   const [activeProvince, setActiveProvince] = useState<string>('all');
 
   const filteredDestinations =
@@ -31,7 +31,8 @@ export const DestinationsPage: React.FC = () => {
       {/* Hero */}
       <section className="relative bg-[#141413] text-white py-20 md:py-28 overflow-hidden">
         <SmartImage
-          src="https://4melankatours.com/wp-content/uploads/2024/06/Beauty_of_Sigiriya_by_Binuka-edited.jpg"
+          src="https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/destinations.jpg"
+          fallbackSrc="https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/06/Beauty_of_Sigiriya_by_Binuka-edited.jpg"
           alt="Destinations in Sri Lanka"
           className="absolute inset-0 w-full h-full object-cover opacity-35"
         />
@@ -71,21 +72,26 @@ export const DestinationsPage: React.FC = () => {
       <section className="py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap gap-2 mb-10">
-            {PROVINCE_FILTERS.map((pf) => (
-              <button
-                key={pf.key}
-                type="button"
-                onClick={() => setActiveProvince(pf.key)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold transition border ${
-                  activeProvince === pf.key
-                    ? 'bg-[#141413] text-[#f5c56b] border-[#141413]'
-                    : 'bg-white text-[#3d3a36] border-black/10 hover:border-black/30'
-                }`}
-              >
-                {pf.label}{' '}
-                <span className="opacity-60 ml-1">{pf.count}</span>
-              </button>
-            ))}
+            {PROVINCE_FILTERS.map((pf) => {
+              const cnt =
+                pf.key === 'all'
+                  ? DESTINATIONS.length
+                  : DESTINATIONS.filter((d) => d.categorySlug === pf.key).length;
+              return (
+                <button
+                  key={pf.key}
+                  type="button"
+                  onClick={() => setActiveProvince(pf.key)}
+                  className={`px-4 py-2 rounded-full text-xs font-semibold transition border ${
+                    activeProvince === pf.key
+                      ? 'bg-[#141413] text-[#f5c56b] border-[#141413]'
+                      : 'bg-white text-[#3d3a36] border-black/10 hover:border-black/30'
+                  }`}
+                >
+                  {pf.label} <span className="opacity-60 ml-1">{cnt}</span>
+                </button>
+              );
+            })}
             <Link
               to="/miscellaneous-attractions"
               className="px-4 py-2 rounded-full text-xs font-semibold bg-[#faf6ee] text-[#c88a2b] border border-[#c88a2b]/30 hover:bg-[#c88a2b] hover:text-white transition"

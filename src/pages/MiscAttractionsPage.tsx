@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Compass, Mountain } from 'lucide-react';
-import { MISC_ATTRACTIONS } from '../data/miscAttractions';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { CtaBand } from '../components/shared/CtaBand';
 
 export const MiscAttractionsPage: React.FC = () => {
+  const { miscAttractions: MISC_ATTRACTIONS } = useCMS();
   return (
     <div>
       {/* Hero */}

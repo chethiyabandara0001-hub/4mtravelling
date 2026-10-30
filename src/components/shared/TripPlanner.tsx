@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send, Mail, Check, ArrowRight, ArrowLeft } from 'lucide-react';
-import { SITE_CONFIG } from '../../data/siteConfig';
+import { useCMS } from '../../context/CMSContext';
 
 const DEST_OPTIONS = [
   'Colombo',
@@ -56,6 +56,7 @@ export const TripPlanner: React.FC<TripPlannerProps> = ({
   headingAccent = 'with Kura',
   subtitle = 'Tell Kura your dates, group size and wishes — he will reply personally with a tailored itinerary and quote.',
 }) => {
+  const { siteConfig } = useCMS();
   const [step, setStep] = useState<number>(1);
   const [arrival, setArrival] = useState('');
   const [departure, setDeparture] = useState('');
@@ -106,11 +107,11 @@ export const TripPlanner: React.FC<TripPlannerProps> = ({
     return lines.join('\n');
   };
 
-  const whatsappHref = `https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(
+  const whatsappHref = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(
     buildSummaryText()
   )}`;
 
-  const mailtoHref = `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent(
+  const mailtoHref = `mailto:${siteConfig.email}?subject=${encodeURIComponent(
     `Sri Lanka Trip Inquiry - ${name || 'Guest'} (${selectedTour})`
   )}&body=${encodeURIComponent(buildSummaryText())}`;
 

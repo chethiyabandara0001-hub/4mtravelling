@@ -9,9 +9,9 @@ import {
   MessageCircle,
   Sparkles,
 } from 'lucide-react';
-import { TourData, TOURS } from '../data/tours';
-import { PACKAGE_TYPES, SITE_CONFIG } from '../data/siteConfig';
+import { TourData } from '../data/tours';
 import { useCurrency } from '../context/CurrencyContext';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { TripPlanner } from '../components/shared/TripPlanner';
 
@@ -21,6 +21,11 @@ interface TourDetailPageProps {
 
 export const TourDetailPage: React.FC<TourDetailPageProps> = ({ tour }) => {
   const { formatPrice } = useCurrency();
+  const {
+    tours: TOURS,
+    packageTypes: PACKAGE_TYPES,
+    siteConfig: SITE_CONFIG,
+  } = useCMS();
   const [openDays, setOpenDays] = useState<Record<number, boolean>>({ 0: true, 1: true });
 
   if (!tour) {

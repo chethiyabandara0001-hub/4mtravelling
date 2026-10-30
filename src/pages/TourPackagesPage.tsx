@@ -1,29 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Check, X, Compass, Clock, Sparkles } from 'lucide-react';
-import { TOURS } from '../data/tours';
-import {
-  PACKAGE_TYPES,
-  TOUR_INCLUDED,
-  TOUR_EXCLUDED,
-  IMPORTANT_NOTES,
-} from '../data/siteConfig';
 import { useCurrency } from '../context/CurrencyContext';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { TripPlanner } from '../components/shared/TripPlanner';
 
-const multiDayTours = TOURS.filter((t) => t.type === 'multi-day');
-const dayTours = TOURS.filter((t) => t.type === 'day');
-
 export const TourPackagesPage: React.FC = () => {
   const { formatPrice } = useCurrency();
+  const {
+    tours,
+    packageTypes: PACKAGE_TYPES,
+    tourIncluded: TOUR_INCLUDED,
+    tourExcluded: TOUR_EXCLUDED,
+    importantNotes: IMPORTANT_NOTES,
+  } = useCMS();
+
+  const multiDayTours = tours.filter((t) => t.type === 'multi-day');
+  const dayTours = tours.filter((t) => t.type === 'day');
 
   return (
     <div>
       {/* Page Hero */}
       <section className="relative bg-[#141413] text-white py-20 md:py-28 overflow-hidden">
         <SmartImage
-          src="https://4melankatours.com/wp-content/uploads/2025/07/All-Ceylon.webp"
+          src="https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/hero/tour-packages.jpg"
+          fallbackSrc="https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2025/07/All-Ceylon.webp"
           alt="Tour packages in Sri Lanka"
           className="absolute inset-0 w-full h-full object-cover opacity-30"
         />

@@ -10,7 +10,7 @@ export interface MiscAttraction {
 export const MISC_ATTRACTIONS: MiscAttraction[] = [
   {
     "id": "yapahuwa-citadel",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/05/Yapahuwa.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/Yapahuwa.jpg",
     "alt": "Yapahuwa Citadel",
     "number": "01",
     "title": "Yapahuwa Citadel",
@@ -18,7 +18,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "gartmore-sripada-fall",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/05/Gartmore-Waterfall11-1024x683.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/Gartmore-Waterfall11-1024x683.jpg",
     "alt": "Gartmore / Sripada Fall",
     "number": "02",
     "title": "Gartmore / Sripada Fall",
@@ -26,7 +26,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "dunsinan-fall",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/05/Dunsinnen-Falls.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/Dunsinnen-Falls.jpg",
     "alt": "Dunsinan Fall",
     "number": "03",
     "title": "Dunsinan Fall",
@@ -34,7 +34,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "upper-diyaluma-falls",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/06/Ihala_Diyaluma-1-edited-scaled.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/06/Ihala_Diyaluma-1-edited-scaled.jpg",
     "alt": "Upper Diyaluma Falls",
     "number": "04",
     "title": "Upper Diyaluma Falls",
@@ -42,7 +42,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "wasgamuwa-national-park",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/06/Sri-Lanka-Elephants-edited.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/06/Sri-Lanka-Elephants-edited.jpg",
     "alt": "Wasgamuwa National Park",
     "number": "05",
     "title": "Wasgamuwa National Park",
@@ -50,7 +50,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "meemure-village",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/05/Meemure-Village.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/Meemure-Village.jpg",
     "alt": "Meemure Village",
     "number": "06",
     "title": "Meemure Village",
@@ -58,7 +58,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "ramboda-falls",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/05/ramboda-falls-title-photo_orig.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/ramboda-falls-title-photo_orig.jpg",
     "alt": "Ramboda Falls",
     "number": "07",
     "title": "Ramboda Falls",
@@ -66,7 +66,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "bopath-ella-falls",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/05/bopath-falls-in-ratnapura-district-900_orig.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/bopath-falls-in-ratnapura-district-900_orig.jpg",
     "alt": "Bopath Ella Falls",
     "number": "08",
     "title": "Bopath Ella Falls",
@@ -74,7 +74,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "adam-s-peak",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/06/Adams-Peak-3-edited.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/06/Adams-Peak-3-edited.jpg",
     "alt": "Adam’s Peak",
     "number": "09",
     "title": "Adam’s Peak",
@@ -82,7 +82,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "awukana-statue",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/05/The-enormous-Awukana-Buddha-Statue-the-wonderful-delicacy-of-stone-that-attracts-the-world-1.jpg",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/05/The-enormous-Awukana-Buddha-Statue-the-wonderful-delicacy-of-stone-that-attracts-the-world-1.jpg",
     "alt": "Awukana Statue",
     "number": "10",
     "title": "Awukana Statue",
@@ -90,7 +90,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "rajangana-lake-spillway",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/08/Spilling_in_Rajanganaya_radial_gates-edited.webp",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/08/Spilling_in_Rajanganaya_radial_gates-edited.webp",
     "alt": "Rajangana Lake & Spillway",
     "number": "11",
     "title": "Rajangana Lake & Spillway",
@@ -98,7 +98,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "pimbureththewa-spillway",
-    "image": "https://4melankatours.com/wp-content/uploads/2024/08/Pimburetththewa-edited.webp",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2024/08/Pimburetththewa-edited.webp",
     "alt": "Pimbureththewa Spillway",
     "number": "12",
     "title": "Pimbureththewa Spillway",
@@ -106,7 +106,7 @@ export const MISC_ATTRACTIONS: MiscAttraction[] = [
   },
   {
     "id": "ambuluwawa-tower",
-    "image": "https://4melankatours.com/wp-content/uploads/2025/10/ambuluwawa-tower-gampola-kandy-sri-lanka.jpg.webp",
+    "image": "https://pub-48e2848968a246d29fc587cde2d660e8.r2.dev/2025/10/ambuluwawa-tower-gampola-kandy-sri-lanka.jpg.webp",
     "alt": "Ambuluwawa Tower",
     "number": "13",
     "title": "Ambuluwawa Tower",

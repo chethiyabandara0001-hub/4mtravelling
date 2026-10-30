@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Globe, Users } from 'lucide-react';
-import { MEMORIES } from '../data/memories';
+import { useCMS } from '../context/CMSContext';
 import { SmartImage } from '../components/shared/SmartImage';
 import { Lightbox, LightboxItem } from '../components/shared/Lightbox';
 import { CtaBand } from '../components/shared/CtaBand';
 
-const MEMORY_FILTERS = [
-  { key: 'all', label: 'All', count: MEMORIES.length },
-  { key: 'indians', label: 'Indians', count: 23 },
-  { key: 'europeans', label: 'Europeans', count: 41 },
-  { key: 'chinese-japanese', label: 'Chinese & Japanese', count: 13 },
-  { key: 'mid-easterns', label: 'Mid Easterns', count: 11 },
-  { key: 'americans', label: 'Americans', count: 9 },
-  { key: 'australians', label: 'Australians', count: 9 },
-  { key: 'south-asians', label: 'South Asians', count: 10 },
-];
-
 export const MemoriesPage: React.FC = () => {
+  const { memories: MEMORIES } = useCMS();
   const [activeCat, setActiveCat] = useState<string>('all');
   const [lbIndex, setLbIndex] = useState<number | null>(null);
+
+  const MEMORY_FILTERS = [
+    { key: 'all', label: 'All', count: MEMORIES.length },
+    { key: 'indians', label: 'Indians', count: MEMORIES.filter((m) => m.category === 'indians').length },
+    { key: 'europeans', label: 'Europeans', count: MEMORIES.filter((m) => m.category === 'europeans').length },
+    { key: 'chinese-japanese', label: 'Chinese & Japanese', count: MEMORIES.filter((m) => m.category === 'chinese-japanese').length },
+    { key: 'mid-easterns', label: 'Mid Easterns', count: MEMORIES.filter((m) => m.category === 'mid-easterns').length },
+    { key: 'americans', label: 'Americans', count: MEMORIES.filter((m) => m.category === 'americans').length },
+    { key: 'australians', label: 'Australians', count: MEMORIES.filter((m) => m.category === 'australians').length },
+    { key: 'south-asians', label: 'South Asians', count: MEMORIES.filter((m) => m.category === 'south-asians').length },
+  ];
 
   const filtered =
     activeCat === 'all' ? MEMORIES : MEMORIES.filter((m) => m.category === activeCat);
